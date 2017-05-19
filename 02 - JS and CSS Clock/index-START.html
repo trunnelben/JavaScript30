@@ -62,12 +62,54 @@
       background:black;
       position: absolute;
       top:50%;
+      transform-origin: 100%;
+      transition: all 0.05s;
+      transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+      transform: rotate(90deg);
     }
 
   </style>
 
   <script>
-
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hoursHand = document.querySelector('.hour-hand');
+    const now = new Date();
+    const seconds = now.getSeconds(); // adds 6 degrees everytime
+    const minutes = now.getMinutes();
+    const hours = now.getHours(); // adds 30 degrees want to split this up.. no transition
+    const secondDegrees = ((seconds/60)*360)+90;
+    const minuteDegrees = ((minutes/60)*360)+90;
+    const hoursDegrees = ((hours/12)*360)+90;
+    secondHand.style.transform = `rotate(${secondDegrees}deg)`;
+    minuteHand.style.transform = `rotate(${minuteDegrees}deg)`;
+    hoursHand.style.transform = `rotate(${hoursDegrees}deg)`;
+    var minuteDegreesTotal = minuteDegrees;
+    var secondDegreesTotal = secondDegrees;
+    var hoursDegreesTotal = hoursDegrees;
+    var prevMinute = minutes;
+    var prevHour = hours;
+    function setDate(){
+      const start = new Date();
+      const secondsStart = start.getSeconds(); // adds 6 degrees everytime
+      console.log(secondsStart);
+      const minutesStart = start.getMinutes();
+      const hoursStart = start.getHours(); // adds 30 degrees want to split this up.. no transition
+      secondDegreesTotal = secondDegreesTotal + 6;
+      console.log(secondDegreesTotal);
+      if(minutesStart != prevMinute){
+        prevMinute = minutesStart;
+        minuteDegreesTotal = minuteDegreesTotal + 6;
+      }
+      if(hoursStart != prevHour){
+        prevHour = hoursStart;
+        hoursDegreesTotal = hoursDegreesTotal + 30;
+      }
+      secondHand.style.transform = `rotate(${secondDegreesTotal}deg)`;
+      minuteHand.style.transform = `rotate(${minuteDegreesTotal}deg)`;
+      hoursHand.style.transform = `rotate(${hoursDegreesTotal}deg)`;
+    }
+    setInterval(setDate, 1000);
 
   </script>
 </body>
